@@ -317,8 +317,6 @@ void ClientMonitor::SendSequence(std::string line)
 
 void ClientManager::Update(bool setShutdown)
 {
-    std::cout << "update" << std::endl;
-
     CheckOnline();
 
     for (auto& client : clients)
@@ -389,7 +387,14 @@ void ClientManager::LoadConfig()
 void ClientManager::LoadConfigLines()
 {
     std::vector<std::string> retVec;
-    std::ifstream in("../Restarter.conf", std::ifstream::in);
+
+    char result[MAX_PATH];
+    GetModuleFileNameA(NULL, result, (sizeof(result)));
+    std::string ppath(result);
+
+    ppath = ppath.substr(0, ppath.find_last_of("\\/"));
+
+    std::ifstream in(ppath+"/Restarter.conf", std::ifstream::in);
     if (in.fail())
         return;
 
