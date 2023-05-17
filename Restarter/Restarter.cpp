@@ -185,7 +185,24 @@ bool ClientMonitor::MoveWindow()
     if (!processInfo)
         return false;
 
-    SetWindowPos(processInfo, NULL, location.x, location.y, location.w, location.h, SWP_NOZORDER | SWP_SHOWWINDOW);
+    RECT rect;
+    GetWindowRect(processInfo, &rect);
+
+    WindowLocation newLoc(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+
+    if (location.x != -1)
+        newLoc.x = location.x;
+
+    if (location.y != -1)
+        newLoc.y = location.y;
+
+    if (location.w != -1)
+        newLoc.w = location.w;
+
+    if (location.h != -1)
+        newLoc.h = location.h;
+
+    SetWindowPos(processInfo, NULL, newLoc.x, newLoc.y, newLoc.w, newLoc.h, SWP_NOZORDER | SWP_SHOWWINDOW);
 
     return true;
 }
@@ -404,6 +421,9 @@ void ClientManager::LoadConfigLines()
         std::getline(in, line);
 
         if (!line.length())
+            continue;
+
+        if (line.find("#") == 0)
             continue;
 
         std::vector<std::string> op = StrSplit(line, "=");
