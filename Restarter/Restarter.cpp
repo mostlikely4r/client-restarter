@@ -264,7 +264,14 @@ bool ClientMonitor::EndProcess()
     }
 
     if (FindProcess())
+    {
+        //DWORD procesId = GetProcessId(processInfo);
+        //HANDLE pHandle = OpenProcess(PROCESS_TERMINATE, 0, procesId);
+        //DWORD lpExitCode;        
+        //GetExitCodeProcess(pHandle, &lpExitCode);
+        //std::cout << "Code =  " << lpExitCode << std::endl;
         TerminateProcess(processInfo, 0);
+    }
 
     return true;
 }
@@ -296,6 +303,12 @@ void ClientMonitor::SendLine(std::string line)
         SendLine(line.substr(std::string("[SHIFT]").length()));
         SendKeyPress(WM_KEYUP, VK_SHIFT);
     }
+    else if (line.find("[ALT]") == 0)
+    {
+        SendKeyPress(WM_KEYDOWN, VK_MENU);
+        SendLine(line.substr(std::string("[ALT]").length()));
+        SendKeyPress(WM_KEYUP, VK_MENU);
+    }
     else if (line == "[PAUSE]")
     {
         Sleep(50);
@@ -310,6 +323,10 @@ void ClientMonitor::SendLine(std::string line)
         SendKey(VK_TAB);
     else if (line == "VK_RETURN")
         SendKey(VK_RETURN);
+    else if (line == "VK_BACK")
+        SendKey(VK_BACK);
+    else if (line == "VK_F4")
+        SendKey(VK_F4);
     else if (line == "<accountname>")
         SendLine(accountName);
     else if (line == "<password>")
