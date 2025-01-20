@@ -503,6 +503,15 @@ void ClientManager::CheckOnline()
 
     log2 = LoadLogFile();
 
+    if (log1.empty())
+    {
+        for (auto client : clients)
+        {
+            client->SetOnline(true);
+        }
+        return;
+    }
+
     if (log1.size() == log2.size())
     {
         for (auto client : clients)
