@@ -58,6 +58,8 @@ ClientMonitor::ClientMonitor(std::string accountName, std::string password, std:
         startTime = 0;
     else
         startTime = time(0);
+
+    lastUpdateTime = time(0);
 }
 
 void ClientMonitor::Update(bool setShutdown)
@@ -86,7 +88,11 @@ void ClientMonitor::Update(bool setShutdown)
         }
         else
         {
-            SendSequence(mgr->clientAntiAfkSequence);
+            if (time(0) - lastUpdateTime > mgr->ClientMinUpdateDelay)
+            {
+                SendSequence(mgr->clientAntiAfkSequence);
+                lastUpdateTime = time(0);
+            }
         }
     }
 
@@ -396,6 +402,7 @@ void ClientManager::LoadConfig()
     clientPostLoginDelay = GetDefaultInt("ClientPostLoginDelay", 0);
 
     clientAntiAfkSequence = GetDefaultString("ClientAntiAfkSequence", "");
+    ClientMinUpdateDelay = GetDefaultInt("ClientMinUpdateDelay", 120);
 
     int DefaultWindowX = GetDefaultInt("DefaultWindowX", -1);
     int DefaultWindowY = GetDefaultInt("DefaultWindowX", -1);

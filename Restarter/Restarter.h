@@ -43,6 +43,7 @@ private:
 	WindowLocation location;
 
 	time_t startTime;
+	time_t lastUpdateTime;
 	std::mutex processMutex;
 	ClientManager* mgr;	
 	bool isOnline;
@@ -69,7 +70,7 @@ private:
 	std::map<std::string, std::string> configLines;
 public:
 	std::string clientDefaultWindowName, clientExecutable, clientArgs, serverWindowNames, serverWindowClass, serverOnlineLogLocation, serverOnlineLogSeperator, serverOnlineLogSpecifier, clientPreShutdownSequence, clientOnlineShutdownSequence, clientLoginSequence, clientPostLoginSequence, clientAntiAfkSequence;
-	int serverOnlineLogSpecifierNr, serverOnlineLogCharNameNr, clientAutoShutDownSeconds, clientOnlineShutdownSequenceDelay, clientPostLoginDelay;
+	int serverOnlineLogSpecifierNr, serverOnlineLogCharNameNr, clientAutoShutDownSeconds, clientOnlineShutdownSequenceDelay, clientPostLoginDelay, ClientMinUpdateDelay;
 	bool clientRestartShutdown;
 };
 
