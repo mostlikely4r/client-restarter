@@ -468,7 +468,7 @@ std::vector<std::string> ClientManager::LoadLogFile()
     std::vector<std::string> retVec;
     std::ifstream in(serverOnlineLogLocation, std::ifstream::in);
     if (in.fail())
-        return {};
+        return {"x"};
 
     do
     {
@@ -503,7 +503,7 @@ void ClientManager::CheckOnline()
 
     log2 = LoadLogFile();
 
-    if (log1.empty())
+    if (!log1.empty() && log1[0] == "x")
     {
         for (auto client : clients)
         {
